@@ -1,0 +1,42 @@
+<mat-toolbar color="primary" role="heading">
+    <span style="font-family: Century Gothic; font-size: 25px;">Sorting Visualizer! </span>
+
+    <button mat-raised-button style="margin:10px;" color="accent" (click)="generate()"
+        [disabled]="generate_button_disabled">Generate
+        Array!</button>
+    <button mat-flat-button style="margin:2.5px;" color="primary" (click)="BubbleSort()"
+        [disabled]="button_disabled">Bubble Sort</button>
+
+    <button mat-flat-button style="margin:2.5px;" color="primary" (click)="SelectionSort()"
+        [disabled]="button_disabled">Selection Sort</button>
+
+    <button mat-flat-button style="margin:2.5px;" color="primary" (click)="InsertionSort()"
+        [disabled]="button_disabled">Insertion Sort</button>
+
+    <button mat-flat-button style="margin:2.5px;" color="primary" (click)="ShellSort()"
+        [disabled]="button_disabled">Shell
+        Sort</button>
+
+    <button mat-flat-button style="margin:2.5px;" color="primary" [disabled]=" button_disabled" (click)="radixSort()">
+        Radix
+        Sort</button>
+
+
+    <!--Size Selector-->
+    <h2 style=" margin-left: 20px; font-family: Century Gothic; font-size: medium;">Size (Max 200):</h2>
+    <input type="text" (keyup)="OnWrite($event)" style="width: 75px; font-size: smaller;" value="100">
+
+    <button mat-flat-button style="margin:5px;" color="primary" (click)="generate()"
+        [disabled]="generate_button_disabled">Change
+    </button>
+
+</mat-toolbar>
+
+<div id="divChart">
+    <canvas id="myChart"></canvas>
+</div>
+<div class="footer">
+    <mat-toolbar color="primary">
+        <div class="footerText"> By: Ishaan Patel</div>
+    </mat-toolbar>
+</div>
