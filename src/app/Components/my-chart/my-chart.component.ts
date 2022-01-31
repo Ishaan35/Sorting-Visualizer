@@ -15,12 +15,12 @@ export class MyChartComponent implements OnInit {
   Chart;
 
 
-  ARRAYSIZE = "100"; //parsed to an integer
+  ARRAYSIZE = "200"; //parsed to an integer
   delay = 0;
 
-  data = new Array(100);
-  labels = new Array(100);
-  backgroundCol = new Array(100).fill(this.blue);
+  data = new Array(200);
+  labels = new Array(200);
+  backgroundCol = new Array(200).fill(this.blue);
 
   button_disabled = true;
   generate_button_disabled = false;
@@ -95,8 +95,8 @@ export class MyChartComponent implements OnInit {
 
     let size = parseInt(this.ARRAYSIZE);
 
-    if (size > 200) {
-      size = 200;
+    if (size > 400) {
+      size = 400;
     }
 
     if (size < 30) { //slower animation for small arrays, but big arrays will have no delay
@@ -110,6 +110,7 @@ export class MyChartComponent implements OnInit {
       this.delay = 0;
     }
 
+    
     this.data = new Array(size);
     this.labels = new Array(size);
     this.backgroundCol = new Array(size).fill(this.blue);
@@ -515,6 +516,292 @@ export class MyChartComponent implements OnInit {
     this.generate_button_disabled = false;
 
 
+  }
+
+  async initiateMergeSort(){
+    this.button_disabled = true;
+    this.generate_button_disabled = true;
+
+    await this.mergeSort(0, this.data.length-1);
+
+    for (let i = 0; i < this.data.length; i++) { //everything is sorted and purple indicates that
+      this.backgroundCol[i] = this.purple;
+    }
+    this.draw();
+    this.generate_button_disabled = false;
+  }
+  
+  async merge(l,m,r){
+    // Find sizes of two subarrays to be merged
+        let n1 = Math.floor(m - l + 1);
+        let n2 = Math.floor(r - m);
+  
+        /* Create temp arrays */
+        let L = new Array();
+        let R = new Array();
+  
+        /*Copy data to temp arrays*/
+        for (let a = 0; a < n1; a++)
+            L.push(this.data[l + a]);
+            
+        for (let b = 0; b < n2; b++)
+            R.push(this.data[m + 1 + b]);
+  
+        /* Merge the temp arrays */
+  
+        // Initial indexes of first and second subarrays
+        let i = 0, j = 0;
+  
+        // Initial index of merged subarray array
+        let k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                this.data[k] = L[i];
+                i++;
+                this.backgroundCol[k] = this.red;
+                this.draw();
+                await new Promise(resolve =>
+                  setTimeout(() => {
+                    resolve();
+                  }, this.delay)
+                );
+              this.backgroundCol[k] = this.blue;
+            }
+            else {
+                this.data[k] = R[j];
+                j++;
+                this.backgroundCol[k] = this.red;
+                this.draw();
+                await new Promise(resolve =>
+                  setTimeout(() => {
+                    resolve();
+                  }, this.delay)
+                );
+                this.backgroundCol[k] = this.blue;
+            }
+            k++;
+        }
+  
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            this.data[k] = L[i];
+            i++;
+            k++;
+            this.backgroundCol[k] = this.red;
+            this.draw();
+            await new Promise(resolve =>
+              setTimeout(() => {
+                resolve();
+              }, this.delay)
+            );
+            this.backgroundCol[k] = this.blue;
+        }
+  
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            this.data[k] = R[j];
+            j++;
+            k++;
+            this.backgroundCol[k] = this.red;
+            this.draw();
+            await new Promise(resolve =>
+              setTimeout(() => {
+                resolve();
+              }, this.delay)
+            );
+            this.backgroundCol[k] = this.blue;
+            
+        }
+  }
+  async mergeSort(l,r){
+    if (l < r) 
+    {
+        // Find the middle point
+        let m = Math.floor(l+ (r-l)/2);
+
+        // Sort first and second halves
+        await this.mergeSort(l, m);
+        await this.mergeSort( m +1, r);
+
+        // Merge the sorted halves
+        await this.merge(l, m, r);
+    }
+  }
+
+
+  async HeapSort()
+  {
+      this.button_disabled = true;
+      this.generate_button_disabled = true
+      //first we have to build the heap. Recall the leaf nodes are already a heap on their own, so to find the last non-leaf node, we go to the element at index n / 2 - 1
+      //has to happen bottom up
+      await this.BuildMaxHeap();
+
+      //starting from the last element, extract root node (largest in the entire list) and swap it with the current node at end of the tree. Now the largest element is sorted
+      //Disregard last element as it is sorted. Heap length follows loop counter variable. Root index is always first
+
+      for (let i = this.data.length - 1; i >= 0; i--)
+      {
+          let temp = this.data[i];
+          this.data[i] = this.data[0];
+          this.data[0] = temp; //sorted
+          this.backgroundCol[i] = this.green;
+          await this.Heapify(i, 0);
+      }
+      for (let i = 0; i < this.data.length; i++) { //everything is sorted and purple indicates that
+        this.backgroundCol[i] = this.purple;
+      }
+      this.draw();
+      this.generate_button_disabled = false;
+
+  }
+  async Heapify(HeapSize, rootIndex)
+  {
+      //indices of the three nodes
+      let largerNode = rootIndex;
+      let leftChild = 2 * rootIndex + 1;
+      let rightChild = 2 * rootIndex + 2;
+
+      //make sure the calculated position of the child element is within the list first before comparing 
+      if (leftChild < HeapSize && this.data[leftChild] > this.data[largerNode])
+      {
+          largerNode = leftChild;
+      }
+      if(rightChild < HeapSize && this.data[rightChild] > this.data[largerNode])
+      {
+          largerNode = rightChild;
+      }
+      
+      //if the root is smaller than one of the children, swap the nodes so that the old root is the new child, and perform heapify on the subtree starting at that node
+      if(largerNode != rootIndex)
+      {
+
+          this.backgroundCol[rootIndex] = this.red;
+          this.backgroundCol[largerNode] = this.red;
+
+          await new Promise(resolve =>
+            setTimeout(() => {
+              resolve();
+            }, this.delay)
+          );
+          this.draw(); // draw it
+
+          let temp = this.data[rootIndex];
+          this.data[rootIndex] = this.data[largerNode];
+          this.data[largerNode] = temp;
+
+          
+          this.backgroundCol[rootIndex] = this.green;
+          this.backgroundCol[largerNode] = this.green;
+
+          await new Promise(resolve =>
+            setTimeout(() => {
+              resolve();
+            }, this.delay)
+          );
+          this.draw(); // draw it
+
+          this.backgroundCol[rootIndex] = this.blue;
+          this.backgroundCol[largerNode] = this.blue;
+
+          await this.Heapify(HeapSize, largerNode); //heap size does not change because we are referring to the entire original list, but the root node of the subtree is located where the old larger child was
+      }
+      //if the larger element is already the root, the heap condition is satisfied, and since we did not change anything, and we built a max heap in the beginning, we know the subtrees below are also maintining the condition. No need to heapify further below
+  }
+  async BuildMaxHeap()
+  {
+      let heapSize = this.data.length;
+      for (let i = Math.floor(this.data.length/2) - 1; i >= 0; i--)
+      {
+          await this.Heapify(heapSize, i); //each subtree will be heapified, and we will move up the entire tree, right to left, bottom level to top level
+      }
+  }
+
+
+  async initiateQuickSort(){
+    this.button_disabled = true;
+    this.generate_button_disabled = true;
+
+    await this.QuickSort(0, this.data.length-1);
+
+    for (let i = 0; i < this.data.length; i++) { //everything is sorted and purple indicates that
+      this.backgroundCol[i] = this.purple;
+    }
+    this.draw();
+    this.generate_button_disabled = false;
+  }
+  async QuickSort(left, right)
+  {
+      if (left < right)
+      {
+          let pivotIndex = await this.HoarePartition(left, right);
+
+          //pivot should be included in the recursive quicksort call for left half because we are using Hoare Partition, which means the element at pivotIndex is not guaranteed at its final sorted position
+          //if we used Lomuto partition, we would not have to include the element at pivotIndex as this algorithm guarantees final sorted position
+          await this.QuickSort(left, pivotIndex); 
+          await this.QuickSort(pivotIndex + 1, right);
+      }
+  }
+  async HoarePartition(left, right)
+  {
+
+      // Partition the sublist from index 'left' to index 'right' as described above.
+      let pivotIndex = -1;
+
+      if (left < right && left >= 0 && right < this.data.length)
+      {
+          let pivot = this.data[Math.floor(left + (right - left) / 2)]; // Immune from overflow exception //middle element
+          let i = left - 1;
+          pivotIndex = right + 1;
+
+          while (i < pivotIndex)
+          {
+              // Starting from the left, loop until a value is found that is >= 'pivot'
+              do
+              {
+                  i++;
+              } while (this.data[i] < pivot);
+
+              // Starting from the right, loop until a value is found that is <= 'pivot'
+              do
+              {
+                  pivotIndex--;
+              } while (this.data[pivotIndex] > pivot);
+
+              if (i < pivotIndex)
+              {   
+                  this.backgroundCol[i] = this.red;
+                  this.backgroundCol[pivotIndex] = this.red;
+                  await new Promise(resolve =>
+                    setTimeout(() => {
+                      resolve();
+                    }, this.delay)
+                  );
+                  this.draw(); // draw it
+
+
+                  // Swap l[i] with l[pivotIndex] because they are out of order relative to 'pivot'
+                  let copy = this.data[i];
+                  this.data[i] = this.data[pivotIndex];
+                  this.data[pivotIndex] = copy;
+
+                  this.backgroundCol[i] = this.green;
+                  this.backgroundCol[pivotIndex] = this.green;
+                  await new Promise(resolve =>
+                    setTimeout(() => {
+                      resolve();
+                    }, this.delay)
+                  );
+                  this.draw(); // draw it
+
+                  this.backgroundCol[i] = this.blue;
+                  this.backgroundCol[pivotIndex] = this.blue;
+                  
+              }
+          }
+      }
+
+      return pivotIndex;
   }
 
 
