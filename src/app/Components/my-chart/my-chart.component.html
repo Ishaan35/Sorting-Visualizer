@@ -5,11 +5,45 @@
 
     </nav>
 
-    <button mat-raised-button style="margin:10px; height: auto;" color="accent" (click)="generate()"
-        [disabled]="generate_button_disabled">Generate
-        Array!</button>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <button mat-raised-button style="margin:2.5px; margin-left: 10px; margin-right: 10px; height: auto;" color="accent" (click)="generate()"
+            [disabled]="generate_button_disabled">Generate
+            Array!</button>
+        <button mat-raised-button style="margin:2.5px; margin-left: 10px; margin-right: 10px; height: auto;" color="accent" (click)="generateReversed()"
+            [disabled]="generate_button_disabled">Reversed
+            Array!</button>
+    </div>
+    
     <div style="display: grid; grid-template-columns: repeat(4, 25%); justify-content: center; align-items: center;">
         
+
+        
+        
+        <button mat-flat-button
+            style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;"
+            color="primary" [disabled]=" button_disabled"
+            (click)="initiateMergeSort()">
+            Merge Sort
+        </button>
+        <button mat-flat-button
+            style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;"
+            color="primary" [disabled]=" button_disabled"
+            (click)="initiateQuickSort()">
+            Quicksort
+        </button>
+        <button mat-flat-button
+            style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;"
+            color="primary" [disabled]=" button_disabled"
+            (click)="HeapSort()">
+            Heap Sort
+        </button>
+
+        <button mat-flat-button
+            style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;"
+            color="primary" [disabled]=" button_disabled" (click)="radixSort()">
+            Radix Sort
+        </button>
+
         <button mat-flat-button style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;" color="primary" (click)="BubbleSort() "
             [disabled]="button_disabled">Bubble Sort</button>
         
@@ -23,28 +57,13 @@
             [disabled]="button_disabled">Shell Sort
         </button>
         
-        <button mat-flat-button style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;" color="primary" [disabled]=" button_disabled" (click)="radixSort()">
-            Radix Sort
-        </button>
         
-        <button mat-flat-button style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;" color="primary" [disabled]=" button_disabled"
-            (click)="initiateMergeSort()">
-            Merge Sort
-        </button>
-        <button mat-flat-button style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;" color="primary" [disabled]=" button_disabled"
-            (click)="initiateQuickSort()">
-            Quicksort
-        </button>
-        <button mat-flat-button style="margin:2.5px; display:flex;justify-content: center; background: #19b5b2; font-weight: 600; letter-spacing: 1px;" color="primary" [disabled]=" button_disabled"
-            (click)="HeapSort()">
-            Heap Sort
-        </button>
     </div>
     
 
 
     <!--Size Selector-->
-    <h2 style=" margin-left: 20px; font-family: Century Gothic; font-size: medium;">Size (Max 400):</h2>
+    <h2 style=" margin-left: 20px; font-family: Century Gothic; font-size: medium;">Size (Max 600):</h2>
     <input type="text" (keyup)="OnWrite($event)" style="width: 75px; font-size: smaller;" value="200">
 
     <button mat-flat-button style="margin:5px;" color="primary" (click)="generate()"
@@ -57,7 +76,9 @@
     <canvas id="myChart"></canvas>
 </div>
 <div class="footer">
+
     <mat-toolbar color="primary">
-        <div class="footerText"> By: Ishaan Patel</div>
+        <div class="footerText"> By: Ishaan Patel </div>
     </mat-toolbar>
+
 </div>

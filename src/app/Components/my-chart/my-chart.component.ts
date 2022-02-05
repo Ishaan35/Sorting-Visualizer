@@ -95,8 +95,8 @@ export class MyChartComponent implements OnInit {
 
     let size = parseInt(this.ARRAYSIZE);
 
-    if (size > 400) {
-      size = 400;
+    if (size > 600) {
+      size = 600;
     }
 
     if (size < 30) { //slower animation for small arrays, but big arrays will have no delay
@@ -170,6 +170,88 @@ export class MyChartComponent implements OnInit {
 
 
 
+  }
+
+  generateReversed(){
+    let size = parseInt(this.ARRAYSIZE);
+
+    if (size > 600) {
+      size = 600;
+    }
+
+    if (size < 30) { //slower animation for small arrays, but big arrays will have no delay
+      this.delay = 600 - size * 20;
+    }
+    else {
+      this.delay = 0;
+    }
+
+    if (this.delay <= 0) { //ensures the delay never goes negative
+      this.delay = 0;
+    }
+
+    
+    this.data = new Array(size);
+    this.labels = new Array(size);
+    this.backgroundCol = new Array(size).fill(this.blue);
+
+    this.button_disabled = false;
+
+
+    for (let i = 0; i < this.data.length; i++) {
+      let x = this.data.length-5-i;
+      
+      if(x < 1){
+        x = 1
+      }
+
+      this.data[i] = x;
+      this.backgroundCol[i] = this.blue; //reset colors
+    }
+
+
+
+
+    this.Chart = new Chart("myChart", {
+      type: 'bar',
+      data: {
+        labels: this.labels,
+        datasets: [{
+          label: 'Length',
+          data: this.data,
+          backgroundColor: this.backgroundCol,
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            },
+            ticks: {
+              display: false
+            }
+
+          }],
+          yAxes: [{
+            gridLines: {
+              display: false
+            },
+            display: false
+          }]
+        },
+        legend: {
+          display: false
+        },
+        animation: {
+          duration: 500,
+        },
+        tooltips: false,
+        hover: false,
+      }
+
+
+    });
   }
 
   async BubbleSort() {
